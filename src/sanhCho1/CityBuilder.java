@@ -1,4 +1,5 @@
 package sanhCho1;
+
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
@@ -20,94 +21,121 @@ public class CityBuilder {
     }
 
     private void buildCity() {
-    	JFrame frame = new JFrame("City Builder");
-    	frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        JFrame frame = new JFrame("City Builder");
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-    	// Kích thước của cửa sổ
-    	int width = 1422; // Đặt chiều rộng
-    	int height = 810; // Đặt chiều cao
-    	frame.setSize(width, height);
+        // Kích thước của cửa sổ
+        int width = 1422; // Đặt chiều rộng
+        int height = 810; // Đặt chiều cao
+        frame.setSize(width, height);
 
-    	// Các dòng code khác ở đây...
+        // Tạo một panel chứa cả thành phố và thanh taskbar
+        CityPanel cityPanel = new CityPanel("image/City.png");
+        cityPanel.setPreferredSize(new Dimension(width, height));
+
+        // Thêm thanh taskbar vào dưới cùng của panel
+        JPanel taskbarPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        taskbarPanel.setOpaque(false); // Đặt thành phần này là trong suốt
+        taskbarPanel.setPreferredSize(new Dimension(width, 150)); // Đặt kích thước cho thanh taskbar
+
+        // Tải hình ảnh cho "Túi đồ" và "Quà online"
+        ImageIcon bagIcon = new ImageIcon("image/tuiDo.png");
+        ImageIcon giftIcon = new ImageIcon("image/qua1.png");
+        
+     // Thay thế việc tạo JButton bằng CustomButton
+        CustomButton bagButton = new CustomButton(bagIcon);
+        CustomButton giftButton = new CustomButton(giftIcon);
+
+        // Đặt nền trong suốt cho các nút
+        bagButton.setOpaque(false);
+        bagButton.setContentAreaFilled(false); // Đặt khu vực nội dung của nút là trong suốt
+        bagButton.setBorderPainted(false); // Loại bỏ viền của nút
+
+        giftButton.setOpaque(false);
+        giftButton.setContentAreaFilled(false); // Đặt khu vực nội dung của nút là trong suốt
+        giftButton.setBorderPainted(false); // Loại bỏ viền của nút
 
 
-        BufferedImage cityImage = loadCityImage("image/City.png");
-        List<Building> buildings = createBuildings();
+        taskbarPanel.add(bagButton);
+        taskbarPanel.add(giftButton);
 
-        JPanel cityPanel = new JPanel() {
-            @Override
-            protected void paintComponent(Graphics g) {
-                super.paintComponent(g);
-                int x = (getWidth() - cityImage.getWidth()) / 2;
-                int y = (getHeight() - cityImage.getHeight()) / 2;
-                g.drawImage(cityImage, x, y, null);
-                // Vẽ các tòa nhà
-                for (Building building : buildings) {
-                    building.draw(g);
-                }
-            }
-        };
+        cityPanel.add(taskbarPanel, BorderLayout.SOUTH);
 
-        // Đặt layout cho frame là BorderLayout
-        frame.setLayout(new BorderLayout());
-        // Thêm cityPanel vào vị trí CENTER của BorderLayout
-        frame.add(cityPanel, BorderLayout.CENTER);
-
-        cityPanel.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseEntered(MouseEvent e) {
-                for (Building building : buildings) {
-                    if (building.contains(e.getX(), e.getY())) {
-                        building.setHover(true);
-                        break;
-                    }
-                }
-                cityPanel.repaint();
-            }
-
-            @Override
-            public void mouseExited(MouseEvent e) {
-                for (Building building : buildings) {
-                    building.setHover(false);
-                }
-                cityPanel.repaint();
-            }
-        });
-
-        cityPanel.addMouseMotionListener(new MouseAdapter() {
-            @Override
-            public void mouseMoved(MouseEvent e) {
-                for (Building building : buildings) {
-                    if (building.contains(e.getX(), e.getY())) {
-                        building.setHover(true);
-                    } else {
-                        building.setHover(false);
-                    }
-                }
-                cityPanel.repaint();
-            }
-        });
-
+        frame.add(cityPanel);
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
     }
 
-    private BufferedImage loadCityImage(String imagePath) {
-        try {
-            return ImageIO.read(new File(imagePath));
-        } catch (IOException e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
+    static class CityPanel extends JPanel {
+        private BufferedImage cityImage;
+        private List<Building> buildings;
 
-    private List<Building> createBuildings() {
-        List<Building> buildings = new ArrayList<>();
-        buildings.add(new Building("image/tiemRen.png", 375, 400));
-        buildings.add(new Building("image/Shop.png", 570, 220));
-        buildings.add(new Building("image/vienChinh.png", 875, 210));
-        // Thêm các tòa nhà khác nếu cần
-        return buildings;
+        public CityPanel(String imagePath) {
+            setLayout(new BorderLayout());
+            try {
+                cityImage = ImageIO.read(new File(imagePath));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            buildings = createBuildings();
+
+            addMouseListener(new MouseAdapter() {
+            	@Override
+            	public void mouseEntered(MouseEvent e) {
+            	    for (Building building : buildings) {
+            	        if (building.contains(e.getX(), e.getY())) {
+            	            building.setHover(true);
+            	            break;
+            	        }
+            	    }
+            	    repaint(); // Gọi repaint() chỉ cho CityPanel
+            	}
+
+            	@Override
+            	public void mouseExited(MouseEvent e) {
+            	    for (Building building : buildings) {
+            	        building.setHover(false);
+            	    }
+            	    repaint(); // Gọi repaint() chỉ cho CityPanel
+            	}
+            });
+
+            addMouseMotionListener(new MouseAdapter() {
+                @Override
+                public void mouseMoved(MouseEvent e) {
+                    for (Building building : buildings) {
+                        if (building.contains(e.getX(), e.getY())) {
+                            building.setHover(true);
+                        } else {
+                            building.setHover(false);
+                        }
+                    }
+                    repaint();
+                }
+            });
+        }
+
+        @Override
+        protected void paintComponent(Graphics g) {
+            super.paintComponent(g);
+            int x = (getWidth() - cityImage.getWidth()) / 2;
+            int y = (getHeight() - cityImage.getHeight()) / 2;
+            g.drawImage(cityImage, x, y, null);
+            // Vẽ các tòa nhà
+            for (Building building : buildings) {
+                building.draw(g, x, y);
+            }
+        }
+
+        private List<Building> createBuildings() {
+            List<Building> buildings = new ArrayList<>();
+            buildings.add(new Building("image/tiemRen.png", 450, 370));
+            buildings.add(new Building("image/Shop.png", 640, 180));
+            buildings.add(new Building("image/vienChinh.png", 950, 190));
+            buildings.add(new Building("image/vienChinh.png", 450, 1500));
+            // Thêm các tòa nhà khác nếu cần
+            return buildings;
+        }
     }
 
     static class Building {
@@ -117,22 +145,17 @@ public class CityBuilder {
         private boolean hover;
 
         public Building(String imagePath, int x, int y) {
-            this.image = loadImage(imagePath);
+            try {
+                image = ImageIO.read(new File(imagePath));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
             this.x = x;
             this.y = y;
             this.hover = false;
         }
 
-        private BufferedImage loadImage(String imagePath) {
-            try {
-                return ImageIO.read(new File(imagePath));
-            } catch (IOException e) {
-                e.printStackTrace();
-                return null;
-            }
-        }
-
-        public void draw(Graphics g) {
+        public void draw(Graphics g, int offsetX, int offsetY) {
             Graphics2D g2d = (Graphics2D) g;
             // Đặt độ trong suốt dựa trên trạng thái hover
             if (hover) {
@@ -141,7 +164,7 @@ public class CityBuilder {
                 g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1.0f));
             }
             // Vẽ hình ảnh của tòa nhà
-            g.drawImage(image, x, y, null);
+            g.drawImage(image, x + offsetX, y + offsetY, null);
         }
 
         public boolean contains(int mouseX, int mouseY) {
@@ -152,10 +175,6 @@ public class CityBuilder {
 
         public void setHover(boolean hover) {
             this.hover = hover;
-        }
-
-        public boolean isHover() {
-            return hover;
         }
     }
 }
