@@ -12,9 +12,9 @@ public class DoHoaTTK extends JFrame implements KeyListener {
     private Image character1ImageTTK; // Ảnh của nhân vật số 1
     private Image character2ImageTTK; // Ảnh của nhân vật số 2
     private int character1X = 100; // Vị trí x của nhân vật số 1
-    private int character1Y = 568; // Vị trí y của nhân vật số 1
+    private int character1Y = 595; // Vị trí y của nhân vật số 1
     private int character2X = 1240; // Vị trí x của nhân vật số 2
-    private int character2Y = 555; // Vị trí y của nhân vật số 2
+    private int character2Y = 576; // Vị trí y của nhân vật số 2
     private final int CHARACTER_SPEED = 6; // Tốc độ di chuyển của nhân vật số 1
     private boolean isFacingLeft = false; // Theo dõi hướng di chuyển của nhân vật số 1
     
@@ -105,7 +105,7 @@ public class DoHoaTTK extends JFrame implements KeyListener {
         // Vẽ ảnh Địa Hình
         float alpha1 = 1f; // Độ trong suốt từ 0.0 (hoàn toàn trong suốt) đến 1.0 (hoàn toàn không trong suốt)
         g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, alpha1));
-        g2d.drawImage(DiaHinhTTK, 0, 350, 1450, 580, this);
+        g2d.drawImage(DiaHinhTTK, 0, 205, 1450, 900, this);
        
         float alpha2 = 1f; // Độ trong suốt của ảnh Tên Map
         g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, alpha2));
