@@ -6,41 +6,28 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 public class CustomButton extends JButton {
-    private boolean hover;
+    private ImageIcon normalIcon;
+    private ImageIcon hoverIcon;
 
-    public CustomButton(Icon icon) {
-        super(icon);
-        setOpaque(false);
-        setContentAreaFilled(false);
+    public CustomButton(ImageIcon normalIcon, ImageIcon hoverIcon) {
+        this.normalIcon = normalIcon;
+        this.hoverIcon = hoverIcon;
+
+        setIcon(normalIcon);
         setBorderPainted(false);
-        hover = false;
+        setContentAreaFilled(false);
+        setFocusPainted(false);
 
         addMouseListener(new MouseAdapter() {
             @Override
             public void mouseEntered(MouseEvent e) {
-                hover = true;
-                repaint();
+                setIcon(hoverIcon);
             }
 
             @Override
             public void mouseExited(MouseEvent e) {
-                hover = false;
-                repaint();
+                setIcon(normalIcon);
             }
         });
-    }
-
-    @Override
-    protected void paintComponent(Graphics g) {
-        if (getModel().isPressed()) {
-            // Add pressed state effect if needed
-        } else if (hover) {
-            Graphics2D g2d = (Graphics2D) g.create();
-            g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.5f));
-            super.paintComponent(g2d);
-            g2d.dispose();
-        } else {
-            super.paintComponent(g);
-        }
     }
 }
