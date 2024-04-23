@@ -8,26 +8,27 @@ public class DoHoa extends JFrame implements KeyListener {
     private Image backgroundImage;
     private Image DiaHinh;
     private Image TenMap;
+    private Image DaoTrenKhong; //Ảnh đảo trên không
     private Image character1Image; // Ảnh của nhân vật số 1
     private Image character2Image; // Ảnh của nhân vật số 2
     private int character1X = 100; // Vị trí x của nhân vật số 1
-    private int character1Y = 622; // Vị trí y của nhân vật số 1
-    private int character2X = 1260; // Vị trí x của nhân vật số 2
-    private int character2Y = 500; // Vị trí y của nhân vật số 2
+    private int character1Y = 654; // Vị trí y của nhân vật số 1
+    private int character2X = 1305; // Vị trí x của nhân vật số 2
+    private int character2Y = 515; // Vị trí y của nhân vật số 2
     private final int CHARACTER_SPEED = 6; // Tốc độ di chuyển của nhân vật số 1
     private boolean isFacingLeft = false; // Theo dõi hướng di chuyển của nhân vật số 1
     
     // Thanh máu của nhân vật số 1
-    private int healthBarWidth = 100; // Độ rộng của thanh máu
-    private int healthBarHeight = 11; // Độ cao của thanh máu
-    private int healthBarX = character1X + 30; // Vị trí x của thanh máu
-    private int healthBarY = character1Y - healthBarHeight + 28; // Vị trí y của thanh máu
+    private int healthBarWidth = 90; // Độ rộng của thanh máu
+    private int healthBarHeight = 10; // Độ cao của thanh máu
+    private int healthBarX = character1X +20; // Vị trí x của thanh máu
+    private int healthBarY = character1Y - healthBarHeight + 10; // Vị trí y của thanh máu
     //Thanh máu của nhân vật số 2
     private int character2Health = 100; // Sức khỏe ban đầu của nhân vật số 2
     private int character2MaxHealth = 100; // Sức khỏe tối đa của nhân vật số 2
-    private int character2HealthBarWidth = 111; // Độ rộng của thanh máu của nhân vật số 2
-    private int character2HealthBarHeight = 11; // Độ cao của thanh máu của nhân vật số 2
-    private int character2HealthBarX = character2X + 10; // Vị trí x của thanh máu của nhân vật số 2
+    private int character2HealthBarWidth = 90; // Độ rộng của thanh máu của nhân vật số 2
+    private int character2HealthBarHeight = 10; // Độ cao của thanh máu của nhân vật số 2
+    private int character2HealthBarX = character2X ; // Vị trí x của thanh máu của nhân vật số 2
     private int character2HealthBarY = character2Y - character2HealthBarHeight - 4 ; // Vị trí y của thanh máu của nhân vật số 2
     
     
@@ -40,6 +41,7 @@ public class DoHoa extends JFrame implements KeyListener {
         try {
             backgroundImage = new ImageIcon("C:\\Users\\ADMIN\\Downloads\\javaDev\\GunnyGame\\src\\Game\\imagesJava\\BackGroundGaCon.jpg").getImage();
             DiaHinh = new ImageIcon("C:\\Users\\ADMIN\\Downloads\\javaDev\\GunnyGame\\src\\Game\\imagesJava\\DiaHinhGaCon.png").getImage();
+            DaoTrenKhong = new ImageIcon("C:\\Users\\ADMIN\\Downloads\\javaDev\\GunnyGame\\src\\Game\\imagesJava\\DaoTrenKhong.png").getImage();
             TenMap = new ImageIcon("C:\\Users\\ADMIN\\Downloads\\javaDev\\GunnyGame\\src\\Game\\imagesJava\\TenMap.png").getImage();
             character1Image = new ImageIcon("C:\\Users\\ADMIN\\Downloads\\javaDev\\GunnyGame\\src\\Game\\imagesJava\\Boy.png").getImage(); // Load ảnh của nhân vật số 1
             character2Image = new ImageIcon("C:\\Users\\ADMIN\\Downloads\\javaDev\\GunnyGame\\src\\Game\\imagesJava\\BossGa.png").getImage(); // Load ảnh của nhân vật số 2
@@ -103,25 +105,26 @@ public class DoHoa extends JFrame implements KeyListener {
         // Vẽ ảnh nền
         g2d.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), this);
 
-        // Thiết lập độ trong suốt của ảnh phía trên
+        // Thiết lập độ trong suốt của ảnh Địa Hình
+        float alpha = 1f; // Độ trong suốt từ 0.0 (hoàn toàn trong suốt) đến 1.0 (hoàn toàn không trong suốt)
+        g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, alpha));
+        g2d.drawImage(DaoTrenKhong, 200, 80, 1000, 700, this);
+        // Vẽ ảnh Địa Hình
         float alpha1 = 1f; // Độ trong suốt từ 0.0 (hoàn toàn trong suốt) đến 1.0 (hoàn toàn không trong suốt)
         g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, alpha1));
-
-        // Vẽ ảnh phía trên
-        g2d.drawImage(DiaHinh, 0, 280, getWidth(), getHeight(), this);
+        g2d.drawImage(DiaHinh, 0, -35, getWidth(), getHeight(), this);
        
-        float alpha2 = 1f; // Độ trong suốt của ảnh bổ sung
+        float alpha2 = 1f; // Độ trong suốt của ảnh Tên Map
         g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, alpha2));
-        
-        g2d.drawImage(TenMap, 610, 50, null);
+        g2d.drawImage(TenMap, 660, 50, 130, 50, null);
 
         // Vẽ nhân vật số 1
         if (isFacingLeft) {
             // Nếu nhân vật đang hướng trái, phản chiếu hình ảnh
-            g2d.drawImage(character1Image, character1X + 180, character1Y, -180, 180, this);
+            g2d.drawImage(character1Image, character1X + 130, character1Y, -130, 130, this);
         } else {
             // Nếu nhân vật đang hướng phải, vẽ bình thường
-            g2d.drawImage(character1Image, character1X, character1Y, 180, 180, this);
+            g2d.drawImage(character1Image, character1X, character1Y, 130, 130, this);
         }
 
         // Vẽ thanh máu của nhân vật số 1
@@ -141,7 +144,7 @@ public class DoHoa extends JFrame implements KeyListener {
 
 
         // Vẽ nhân vật số 2
-        g2d.drawImage(character2Image, character2X, character2Y, 130, 150, this);
+        g2d.drawImage(character2Image, character2X, character2Y, 90, 120, this);
 
         // Giải phóng Graphics2D
         g2d.dispose();
@@ -164,8 +167,8 @@ public class DoHoa extends JFrame implements KeyListener {
                 break;
         }
         // Cập nhật vị trí của thanh máu
-        healthBarX = character1X + 50;
-        healthBarY = character1Y - healthBarHeight + 28;
+        healthBarX = character1X + 20;
+        healthBarY = character1Y - healthBarHeight + 10;
 
         repaint(); // Vẽ lại màn hình sau khi di chuyển
     }
