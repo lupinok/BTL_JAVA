@@ -6,7 +6,7 @@ public class DuongDanBay extends JPanel {
     private double bulletX; // Vị trí x ban đầu của viên đạn
     private double bulletY; // Vị trí y ban đầu của viên đạn
     private int thanhLuc = 50; // Thanh lực (giá trị từ 1 đến 100)
-    private double bulletSpeed = 300 + thanhLuc * 30; // Vận tốc ban đầu của viên đạn (px/s)
+    private double bulletSpeed = 300 + thanhLuc * 50; // Vận tốc ban đầu của viên đạn (px/s)
     private double bulletAngle; // Góc bắn (được chuyển đổi từ độ sang radian)
     private double bulletSpeedX; // Vận tốc theo trục x của viên đạn (px/s)
     private double bulletSpeedY; // Vận tốc theo trục y của viên đạn (px/s)
@@ -30,17 +30,17 @@ public class DuongDanBay extends JPanel {
     }
     private boolean checkCollision1() {
         // Kiểm tra xem viên đạn có chạm vào các vùng cản trở không thể rơi
-        return (bulletX == 0 || bulletX == frameWidth || bulletY == 768 ||
-                (bulletX >= 335 && bulletX <= 521 && bulletY == 422) ||
-                (bulletX >= 910 && bulletX <= 1114 && bulletY == 422) ||
-                (bulletX >= 607 && bulletX <= 815 && bulletY == 581));
+        return ( (bulletY >= 666 && bulletY <= 670) ||
+                (bulletX >= 335 && bulletX <= 521 && bulletY >= 420 && bulletY <= 424 ) ||
+                (bulletX >= 910 && bulletX <= 1114 && bulletY >= 420 && bulletY <= 424) ||
+                (bulletX >= 607 && bulletX <= 815 && bulletY >= 579 && bulletY <= 583)) ;
     }
     private boolean checkCollision2() {
         // Kiểm tra xem viên đạn có chạm vào các vùng cản trở có thể rơi
         return (bulletX == 0 || bulletX == frameWidth ||
-                (bulletX >= 335 && bulletX <= 521 && bulletY > 422 && bulletY <= 467) ||
-                (bulletX >= 910 && bulletX <= 1114 && bulletY > 442 && bulletY <= 467) ||
-                (bulletX >= 607 && bulletX <= 815 && bulletY > 581 && bulletY <= 623));
+                (bulletX >= 035 && bulletX <= 1121 && bulletY >= 622 && bulletY <= 667) ||
+                (bulletX >= 910 && bulletX <= 1114 && bulletY >= 442 && bulletY <= 467) ||
+                (bulletX >= 607 && bulletX <= 815 && bulletY >= 581 && bulletY <= 623));
     }
 
     private void moveBullet() {
@@ -53,14 +53,15 @@ public class DuongDanBay extends JPanel {
         bulletY += bulletSpeedY * timeInSeconds; // Di chuyển theo trục y
 
         // Kiểm tra va chạm
-        if (checkCollision1()) {
-            bulletSpeedX = 0;
-            bulletSpeedY = 0; 
-        }
-        if(checkCollision2()){
+       
+        if(checkCollision1()){
             bulletSpeedX = 0;
             bulletSpeedY = 0;
             gravity = 0;
+        }   
+        if(checkCollision1()){
+            bulletSpeedX = 0;
+            bulletSpeedY = 0;
         }   
     }
 
@@ -79,8 +80,8 @@ public class DuongDanBay extends JPanel {
         JFrame frame = new JFrame("Đường Dẫn Bay");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(1422, 810);
-        int thanhLuc = 40; // Thanh lực
-        double gocBan = 60; // Góc bắn
+        int thanhLuc = 90; // Thanh lực
+        double gocBan = 50; // Góc bắn
         double startX = 100; // Vị trí x ban đầu
         double startY = 654; // Vị trí y ban đầu
         DuongDanBay duongDanBay = new DuongDanBay(thanhLuc, gocBan, startX, startY);
